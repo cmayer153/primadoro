@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 import TimingModule from './TimingModule.jsx';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 
 class App extends React.Component {
   constructor() {

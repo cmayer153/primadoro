@@ -10,16 +10,15 @@ function TimingModule(props) {
     return pomState.intervals[pomState.progress];
   }
 
-  const intervalComplete = () => {
+  const intervalComplete = async () => {
     console.log("finished interval");
     let tempProgress = pomState + 1;
     if (tempProgress === intervals.length) {
       tempProgress = 0;
     }
-    console.log('setting pom state');
-    debugger;
-    setPomState(tempProgress);
-    reset();
+    console.log('setting pom state: ', pomState);
+    await setPomState(tempProgress);
+    console.log('pomstate set: ', pomState);
   }
 
   useEffect( () => {
