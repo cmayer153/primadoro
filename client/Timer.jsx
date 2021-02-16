@@ -2,17 +2,27 @@ import React, { useEffect, useState } from 'react';
 
 function Timer({running, initTime, callBack}) {
   const [currentTime, setCurrentTime] = useState(initTime);
+  console.log('running: ', running);
 
+  
   useEffect( () => {
     if (running) {
-      countDown();
+      countDown_A();
     } 
   }, [running]);
+  
 
-  function countDown() {
+  function countDown_A() {
     if (running) {
       setCurrentTime(currentTime - 1);
-      setTimeout( () => {countDown()}, 1000);
+      let tmpCount = setTimeout(countDown_B, 1000);
+    }
+  }
+
+  function countDown_B() {
+    if (running) {
+      setCurrentTime(currentTime - 1);
+      let tmpCount = setTimeout(countDown_A, 1000);
     }
   }
 
@@ -21,9 +31,10 @@ function Timer({running, initTime, callBack}) {
       callBack();
     }
   }, [currentTime]);
+  
 
   return (
-    <h1>currentTime</h1>
+    <h1>{currentTime}</h1>
   )
   
 

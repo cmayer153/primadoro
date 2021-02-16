@@ -13,11 +13,12 @@ function TimingModule(props) {
   return (
     <div className="timing-module">
       <Timer running={running} initTime={intervals[pomMarker]} callBack={intervalComplete}/>
-      <button onClick={setRunning(true)}>Run</button>
-      <button onClick={setRunning(false)}>Pause</button>
+      <button onClick={() => setRunning(true)}>Run</button>
+      <button onClick={() => setRunning(false)}>Pause</button>
     </div>
   );
 
 }
 
 export default TimingModule;
+
