@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-function Timer({running, setRunning, initTime, callBack}) {
-  const [currentTime, setCurrentTime] = useState(initTime);
+function Timer({running, setRunning, getInitTime, zeroCB, preloadCB}) {
+  const [currentTime, setCurrentTime] = useState(getInitTime());
   console.log('running: ', running);
 
   
@@ -11,18 +11,23 @@ function Timer({running, setRunning, initTime, callBack}) {
     } 
   }, [running]);
 
+  /*
   useEffect( () => {
     setCurrentTime(initTime);
   }, [initTime]);
-  
+  */
 
   
   useEffect( () => {
-    if (currentTime === 0) {
-      callBack();
-      setRunning(false);
+    if (currentTime === 10) {
+      preloadCB();
     }
-    if (running) {
+    if (currentTime === 0) {
+      zeroCB();
+      setRunning(false);
+      setCurrentTime(getInitTime());
+      setTimeout( () => setRunning(true), 0);
+    } else if (running) {
       setTimeout( () => {setCurrentTime(currentTime - 1)}, 1000 );
     }
 

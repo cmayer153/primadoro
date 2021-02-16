@@ -13,13 +13,20 @@ function TimingModule(props) {
   }
 
   useEffect ( () => {
+    console.log('new pomMarker:', pomMarker);
+    console.log('updating current interval to: ', intervals[pomMarker]);
     setCurrentInterval(intervals[pomMarker]);
     
   }, [pomMarker])
 
+  const getInitTime = () => {
+    console.log('getInitTime: ', currentInterval);
+    return currentInterval;
+  }
+
   return (
     <div className="timing-module">
-      <Timer running={running} setRunning={setRunning} initTime={currentInterval} callBack={intervalComplete}/>
+      <Timer running={running} setRunning={setRunning} getInitTime={() => getInitTime()} zeroCB={intervalComplete} preloadCB={() => setPomMarker(pomMarker + 1)}/>
       <button onClick={() => setRunning(true)}>Run</button>
       <button onClick={() => setRunning(false)}>Pause</button>
     </div>
