@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import Timer, {useTimer} from 'react-compound-timer';
+import Timer from './Timer.jsx';
 
 function TimingModule(props) {
-  var [pomState, setPomState] = useState({
-    progress: 0,
-    intervals: [25, 5, 25, 5, 25, 5, 25, 15]
-  });
-
-  const getTime = () => {
-    return pomState.intervals[pomState.progress];
-  }
+  const [pomMarker, setPomMarker] = useState(0);
+  const intervals = [20, 12, 19, 11, 18, 30];
+  const [running, setRunning] = useState(false);
 
   const intervalComplete = () => {
     console.log("finished interval");
   }
 
-  var {value,
-    controls: { setTime, start, pause, resume, reset}
-  } = useTimer({ initialTime: 120000,
-    direction: 'backward',
-    startImmediately: false,
-    checkpoints: [{time: 0, callback: () => intervalComplete()}]
-    });
-
-
   return (
     <div className="timing-module">
-      <h2>{value.m}:{value.s}</h2>
+      <Timer running={running} initTime={intervals[pomMarker]} callBack={intervalComplete}/>
+      <button onClick={setRunning(true)}>Run</button>
+      <button onClick={setRunning(false)}>Pause</button>
     </div>
   );
 
