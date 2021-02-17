@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Timer from './Timer.jsx';
+import './fashion.css'
+
 
 function TimingModule(props) {
   const [pomMarker, setPomMarker] = useState(0);
@@ -9,7 +11,6 @@ function TimingModule(props) {
 
   const intervalComplete = () => {
     console.log("finished interval");
-    setPomMarker(pomMarker => pomMarker + 1);
   }
 
   useEffect ( () => {
@@ -25,10 +26,14 @@ function TimingModule(props) {
   }
 
   return (
-    <div className="timing-module">
-      <Timer running={running} setRunning={setRunning} getInitTime={() => getInitTime()} zeroCB={intervalComplete} preloadCB={() => setPomMarker(pomMarker + 1)}/>
-      <button onClick={() => setRunning(true)}>Run</button>
-      <button onClick={() => setRunning(false)}>Pause</button>
+    <div className="primadoro-timing-module">
+      <div className="primadoro-timer">
+        <Timer running={running} setRunning={setRunning} getInitTime={() => getInitTime()} zeroCB={intervalComplete} preloadCB={() => setPomMarker(pomMarker + 1)}/>
+      </div>
+      <div className="primadoro-timer-control-panel">
+        <button className="primadoro-timer-control-button" onClick={() => setRunning(true)}>Run</button>
+        <button className="primadoro-timer-control-button" onClick={() => setRunning(false)}>Pause</button>
+      </div>
     </div>
   );
 

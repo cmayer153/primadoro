@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 import TimingModule from './TimingModule.jsx';
+import './fashion.css'
 
 class App extends React.Component {
   constructor() {
@@ -13,7 +14,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="primadoro-main-page">
         PRIMADORO (^)
         <TimingModule />
       </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 function Timer({running, setRunning, getInitTime, zeroCB, preloadCB}) {
   const [currentTime, setCurrentTime] = useState(getInitTime());
-  console.log('running: ', running);
+  //console.log('running: ', running);
 
   
   useEffect( () => {
@@ -19,7 +19,7 @@ function Timer({running, setRunning, getInitTime, zeroCB, preloadCB}) {
 
   
   useEffect( () => {
-    if (currentTime === 10) {
+    if (currentTime === 1) {
       preloadCB();
     }
     if (currentTime === 0) {
