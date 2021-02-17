@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import LogEntry from './LogEntry.jsx';
 
 function LogList({entries}) {
 
@@ -11,7 +12,9 @@ function LogList({entries}) {
   } else {
     return (
       <div>
-          List Goes Here
+          {entries.map( (entry) => (
+            <LogEntry entry={entry} />
+          ))}
       </div>
     )
   }

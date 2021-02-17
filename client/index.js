@@ -31,8 +31,15 @@ class App extends React.Component {
   updateUser(newUser) {
     console.log('Switched to user: ', newUser);
     this.setState({currentUser: newUser});
-
-    //axios get user's records
+    axios.get(`/api/logs/${newUser}`)
+      .then ( (res) => {
+        if (res.data.length > 0) {
+          this.setState({logEntries: res.data});
+        }
+      })
+      .catch( (err) => {
+        console.log('error fetching logs: ', err);
+      });
   }
 
   addLog(timeStamp) {
@@ -44,9 +51,12 @@ class App extends React.Component {
 
   saveLog(inEntry) {
     console.log('saving log: ', inEntry)
-    axios.post('/api/saveLog', inEntry)
+    axios.post('/api/saveLog', {entry: inEntry})
       .then ( (res) => {
         console.log('back from server: ', res.data);
+        if (res.data.length > 0) {
+          this.setState({logEntries: res.data});
+        }
       })
       .catch ( (err) => {
         console.log('error trying to save log: ', err);
