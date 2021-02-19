@@ -24,10 +24,17 @@ function Timer({running, setRunning, getInitTime, zeroCB, preloadCB}) {
     }
 
   }, [currentTime, running]);
+
+  const formatTime = (timeInSeconds) => {
+    let minutes = Math.floor(timeInSeconds / 60);
+    let seconds = timeInSeconds % 60;
+    return '' + minutes.toString().padStart(2, '0') + ':' + 
+      seconds.toString().padStart(2, '0');
+  }
   
 
   return (
-    <h1>{currentTime}</h1>
+    <h1>{formatTime(currentTime)}</h1>
   )
   
 

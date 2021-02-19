@@ -5,7 +5,7 @@ import './fashion.css'
 
 function TimingModule({addLog}) {
   const [pomMarker, setPomMarker] = useState(0);
-  const intervals = [20, 12, 19, 11, 18, 30];
+  const intervals = [25, 5, 25, 5, 25, 5, 25, 20];
   const [currentInterval, setCurrentInterval] = useState(intervals[pomMarker]);
   const [running, setRunning] = useState(false);
 
@@ -18,7 +18,7 @@ function TimingModule({addLog}) {
   useEffect ( () => {
     console.log('new pomMarker:', pomMarker);
     console.log('updating current interval to: ', intervals[pomMarker]);
-    setCurrentInterval(intervals[pomMarker]);
+    setCurrentInterval(intervals[pomMarker % intervals.length]);
     
   }, [pomMarker])
 
