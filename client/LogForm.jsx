@@ -6,7 +6,7 @@ function LogForm({entry, submit}) {
     return (null)
   }
   // is this violating a hooks rule here?
-  const [myEntry, setMyEntry] = useState(entry);
+  const [myEntry, setMyEntry] = useState({...entry});
 
 
   const handleChange = (e) => {

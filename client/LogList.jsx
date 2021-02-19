@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import LogEntry from './LogEntry.jsx';
 import './fashion.css';
 
-function LogList({entries}) {
+function LogList({entries, submit}) {
 
   if(entries === null) {
     return (
@@ -14,7 +14,7 @@ function LogList({entries}) {
     return (
       <div className="primadoro-log-list">
           {entries.map( (entry) => (
-            <LogEntry entry={entry} />
+            <LogEntry entry={entry} submit={submit}/>
           ))}
       </div>
     )

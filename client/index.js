@@ -7,11 +7,13 @@ import LogForm from './LogForm.jsx';
 import axios from 'axios';
 import './fashion.css'
 
-const blankEntry = {
+const getBlankEntry = () => {
+  return {
   username: '',
   timeStamp: '',
   description: '',
   workRating: ''
+  }
 }
 
 class App extends React.Component {
@@ -25,7 +27,7 @@ class App extends React.Component {
 
     this.updateUser = this.updateUser.bind(this);
     this.addLog = this.addLog.bind(this);
-    this.saveLog = this.saveLog.bind(this);
+    this.editLog = this.editLog.bind(this);
   }
 
   updateUser(newUser) {
@@ -44,17 +46,13 @@ class App extends React.Component {
   }
 
   addLog(timeStamp) {
-    let tempEntry = blankEntry;
-    console.log("should be blank: ", tempEntry);
+    let tempEntry = getBlankEntry();
     tempEntry.username = this.state.currentUser;
     tempEntry.timeStamp = timeStamp;
-    console.log(tempEntry);
     this.setState({newEntry: tempEntry});
-  }
-
-  saveLog(inEntry) {
-    console.log('saving log: ', inEntry)
-    axios.post('/api/saveLog', {entry: inEntry})
+    
+    console.log('saving log: ', tempEntry)
+    axios.post('/api/saveLog', {entry: tempEntry})
       .then ( (res) => {
         console.log('back from server: ', res.data);
         if (res.data.length > 0) {
@@ -68,6 +66,20 @@ class App extends React.Component {
     // reset new entry to blankEntry
   }
 
+  editLog(inLog) {
+    console.log('saving log: ', inLog)
+    axios.post('/api/editLog', {entry: inLog})
+      .then ( (res) => {
+        console.log('back from server: ', res.data);
+        if (res.data.length > 0) {
+          this.setState({logEntries: res.data});
+        }
+      })
+      .catch ( (err) => {
+        console.log('error trying to save log: ', err);
+      })
+  }
+
 
   render() {
     return (
@@ -75,8 +87,7 @@ class App extends React.Component {
         PRIMADORO (^)
         <LoginField saveUser={this.updateUser}/>
         <TimingModule addLog={this.addLog}/>
-        <LogForm entry={this.state.newEntry} submit={this.saveLog}/>
-        <LogList entries={this.state.logEntries}/>
+        <LogList entries={this.state.logEntries} submit={this.editLog}/>
       </div>
     )
   }
