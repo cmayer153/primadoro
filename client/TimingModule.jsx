@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Timer from './Timer.jsx';
+var { DateTime } = require('luxon');
 import './fashion.css'
 
 
@@ -11,7 +12,8 @@ function TimingModule({addLog}) {
 
   const intervalComplete = () => {
     console.log("finished interval");
-    addLog(Date.now());
+    console.log("testing time: ", DateTime.now());
+    addLog(DateTime.now());
   }
 
   useEffect ( () => {

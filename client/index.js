@@ -31,6 +31,7 @@ class App extends React.Component {
   updateUser(newUser) {
     console.log('Switched to user: ', newUser);
     this.setState({currentUser: newUser});
+    this.setState({logEntries: null});
     axios.get(`/api/logs/${newUser}`)
       .then ( (res) => {
         if (res.data.length > 0) {
@@ -44,8 +45,10 @@ class App extends React.Component {
 
   addLog(timeStamp) {
     let tempEntry = blankEntry;
+    console.log("should be blank: ", tempEntry);
     tempEntry.username = this.state.currentUser;
     tempEntry.timeStamp = timeStamp;
+    console.log(tempEntry);
     this.setState({newEntry: tempEntry});
   }
 

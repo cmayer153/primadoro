@@ -28,6 +28,7 @@ function LogForm({entry, submit}) {
   }
 
   return (
+    <div className="primadoro-log-form">
     <form onSubmit={handleSubmit}>
       <label>
         Description:
@@ -37,8 +38,9 @@ function LogForm({entry, submit}) {
         Rating:
         <input type="text" name="workRating" value={myEntry.workRating} onChange={handleChange}/>
       </label>
-      <input type="submit" value="Switch User" />
+      <input type="submit" value="Save Log" />
     </form>
+    </div>
   )
 }
 
