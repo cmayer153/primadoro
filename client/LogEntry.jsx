@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '@material-ui/core/Modal';
+var { DateTime } = require('luxon');
+import LogForm from './LogForm.jsx';
 import './fashion.css';
 
-function LogEntry({entry}) {
+function LogEntry({entry, submit}) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -15,9 +17,7 @@ function LogEntry({entry}) {
 
   const modalBody = (
     <div className="primadoro-log-modal">
-      <p>
-       TEST
-      </p>
+      <LogForm entry={entry} submit={submit} />
     </div>
   );
 
