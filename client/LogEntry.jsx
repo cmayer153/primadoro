@@ -25,7 +25,7 @@ function LogEntry({entry, submit}) {
     <React.Fragment>
     <div className="primadoro-log-entry">
       <h3>{entry.username}</h3>
-      <h3>{entry.timeStamp}</h3>
+      <h3>{DateTime.fromMillis(parseInt(entry.timeStamp, 10)).toLocaleString(DateTime.DATETIME_MED)}</h3>
       <p>{entry.description}</p>
       <h3>{entry.workRating}</h3>
       <button onClick={handleOpen} className="primadoro-modal-button">Edit</button>

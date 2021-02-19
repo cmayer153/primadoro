@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const PORT = 3010
 const path = require('path');
-import { getLogs, saveLog, editLog } from '../database/queries.js';
+import { getLogs, saveLog, editLog, sortLogs } from '../database/queries.js';
 
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 app.use(bodyParser.json());
@@ -12,7 +12,7 @@ app.get('/api/logs/:username', (req, res) => {
   console.log('retrieveLogs for: ', req.params.username);
   getLogs(req.params.username)
     .then( (data) => {
-      res.send(data);
+      res.send(sortLogs(data));
     })
     .catch( (err) => {
       res.status(500).send();
@@ -27,7 +27,7 @@ app.post('/api/saveLog', (req, res) => {
       getLogs(req.body.entry.username)
       .then ( (data) => {
           //console.log('server gotLogs: ', data);
-          res.send(data);
+          res.send(sortLogs(data));
       })
     })
     .catch( (error) => {
@@ -43,7 +43,7 @@ app.post('/api/editLog', (req, res) => {
       getLogs(req.body.entry.username)
       .then ( (data) => {
           //console.log('server gotLogs: ', data);
-          res.send(data);
+          res.send(sortLogs(data));
       })
     })
     .catch( (error) => {

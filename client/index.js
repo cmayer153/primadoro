@@ -47,7 +47,6 @@ class App extends React.Component {
 
   addLog(timeStamp) {
     let tempEntry = getBlankEntry();
-    console.log("should be blank: ", tempEntry);
     tempEntry.username = this.state.currentUser;
     tempEntry.timeStamp = timeStamp;
     this.setState({newEntry: tempEntry});

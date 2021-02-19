@@ -43,6 +43,10 @@
   grid-row-end: 5;
 }
 
+.primadoro-log-entry {
+  border-style: solid;
+}
+
 .primadoro-log-modal {
   width: 600px;
   height: 400px;

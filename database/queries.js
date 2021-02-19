@@ -1,5 +1,15 @@
 const PrimaLogs = require('./PrimaLogs.js');
 
+var sortLogs = (entries) => {
+  return entries.sort( (a, b) => {
+    if (a.timeStamp > b.timeStamp) {
+      return -1;
+    } else {
+      return 1;
+    }
+  })
+}
+
 var getLogs = (username) => {
   const query = PrimaLogs.where({username: username});
   return query.find();
@@ -16,3 +26,4 @@ var editLog = (entry) => {
 exports.getLogs = getLogs;
 exports.saveLog = saveLog;
 exports.editLog = editLog;
+exports.sortLogs = sortLogs;
