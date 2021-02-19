@@ -1,7 +1,7 @@
 .primadoro-main-page {
   display: grid;
   grid-template-columns: 20% auto 20%;
-  grid-template-rows: 10% 30% auto;
+  grid-template-rows: 10% 10% 30% auto;
 }
 
 .primadoro-timing-module {
@@ -27,4 +27,18 @@
 .primadoro-timer-control-button {
   display: inline-block;
   justify-self: center;
+}
+
+.primadoro-log-form {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+
+.primadoro-log-list {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 4;
+  grid-row-end: 5;
 }

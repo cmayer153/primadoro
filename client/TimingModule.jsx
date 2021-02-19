@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Timer from './Timer.jsx';
+var { DateTime } = require('luxon');
 import './fashion.css'
 
 
-function TimingModule(props) {
+function TimingModule({addLog}) {
   const [pomMarker, setPomMarker] = useState(0);
   const intervals = [20, 12, 19, 11, 18, 30];
   const [currentInterval, setCurrentInterval] = useState(intervals[pomMarker]);
@@ -11,6 +12,8 @@ function TimingModule(props) {
 
   const intervalComplete = () => {
     console.log("finished interval");
+    console.log("testing time: ", DateTime.now());
+    addLog(DateTime.now());
   }
 
   useEffect ( () => {
