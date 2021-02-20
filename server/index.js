@@ -1,9 +1,11 @@
 const express = require('express');
+const https = require('https');
 const app = express();
 const bodyParser = require('body-parser');
-const PORT = 3010
+const PORT = 443;
 const path = require('path');
 import { getLogs, saveLog, editLog, sortLogs } from '../database/queries.js';
+const fs = require('fs');
 
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 app.use(bodyParser.json());
@@ -52,4 +54,9 @@ app.post('/api/editLog', (req, res) => {
     })
 });
 
-app.listen(PORT, () => {console.log('Primadoro listening on port: ', PORT)});
+const httpsServer = https.createServer({
+  key: fs.readFileSync('/etc/letsencrypt/live/primadoro.app/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/primadoro.app/fullchain.pem'),
+}, app);
+
+httpsServer.listen(PORT, () => {console.log('Primadoro listening on port: ', PORT)});

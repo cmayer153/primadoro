@@ -5,7 +5,7 @@ import './fashion.css'
 
 function TimingModule({addLog}) {
   const [pomMarker, setPomMarker] = useState(0);
-  const intervals = [25, 5, 25, 5, 25, 5, 25, 20];
+  const intervals = [1500, 300, 1500, 300, 1500, 300, 1500, 1200];
   const [currentInterval, setCurrentInterval] = useState(intervals[pomMarker]);
   const [running, setRunning] = useState(false);
 
