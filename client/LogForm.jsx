@@ -5,7 +5,7 @@ function LogForm({entry, submit, closeModal}) {
   if (entry === null) {
     return (null)
   }
-  // is this violating a hooks rule here?
+  // is this violating a hooks rule here? (putting it after the null check?)
   const [myEntry, setMyEntry] = useState({...entry});
 
 
@@ -33,7 +33,7 @@ function LogForm({entry, submit, closeModal}) {
     <form onSubmit={handleSubmit}>
       <label>
         Description:
-        <input type="text" name="description" value={myEntry.description} onChange={handleChange}/>
+        <textarea className="primadoro-log-form-description" type="text" name="description" value={myEntry.description} onChange={handleChange}/>
       </label>
       <label>
         Rating:
