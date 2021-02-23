@@ -17,7 +17,7 @@ function LogEntry({entry, submit}) {
 
   const modalBody = (
     <div className="primadoro-log-modal">
-      <LogForm entry={entry} submit={submit} />
+      <LogForm entry={entry} submit={submit} closeModal={handleClose}/>
     </div>
   );
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './fashion.css';
 
-function LogForm({entry, submit}) {
+function LogForm({entry, submit, closeModal}) {
   if (entry === null) {
     return (null)
   }
-  // is this violating a hooks rule here?
+  // is this violating a hooks rule here? (putting it after the null check?)
   const [myEntry, setMyEntry] = useState({...entry});
 
 
@@ -25,6 +25,7 @@ function LogForm({entry, submit}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     submit(myEntry);
+    closeModal();
   }
 
   return (
@@ -32,7 +33,7 @@ function LogForm({entry, submit}) {
     <form onSubmit={handleSubmit}>
       <label>
         Description:
-        <input type="text" name="description" value={myEntry.description} onChange={handleChange}/>
+        <textarea className="primadoro-log-form-description" type="text" name="description" value={myEntry.description} onChange={handleChange}/>
       </label>
       <label>
         Rating:
