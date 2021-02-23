@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Timer from './Timer.jsx';
 import './fashion.css'
+import alarm from './sounds/alarm_gentle_CUT.wav';
 
 
 function TimingModule({addLog}) {
@@ -8,10 +9,11 @@ function TimingModule({addLog}) {
   const intervals = [25, 5, 25, 5, 25, 5, 25, 20];
   const [currentInterval, setCurrentInterval] = useState(intervals[pomMarker]);
   const [running, setRunning] = useState(false);
+  const alarmAudio = new Audio(alarm);
 
   const intervalComplete = () => {
     console.log("finished interval");
-    //console.log("testing time: ", DateTime.now());
+    alarmAudio.play();
     addLog(Date.now());
   }
 
