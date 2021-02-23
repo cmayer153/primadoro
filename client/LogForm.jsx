@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './fashion.css';
 
-function LogForm({entry, submit}) {
+function LogForm({entry, submit, closeModal}) {
   if (entry === null) {
     return (null)
   }
@@ -25,6 +25,7 @@ function LogForm({entry, submit}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     submit(myEntry);
+    closeModal();
   }
 
   return (
