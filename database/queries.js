@@ -1,5 +1,6 @@
 const PrimaLogs = require('./PrimaLogs.js');
 
+
 var sortLogs = (entries) => {
   return entries.sort( (a, b) => {
     if (a.timeStamp > b.timeStamp) {
