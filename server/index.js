@@ -12,9 +12,10 @@ app.use(express.static(path.join(__dirname, '..', 'dist')));
 app.use(bodyParser.json());
 app.use(session({secret: 'primadoro-dev', resave: false, saveUninitialized: false }));
 
+require('../database/connection.js');
 require('../database/Users.js');
 require('../config/passport.js');
-app.use(require('./routes'));
+app.use(require('../routes'));
 
 app.get('/api/logs/:username', (req, res) => {
   console.log('retrieveLogs for: ', req.params.username);

@@ -13,11 +13,13 @@ const auth = {
   required: jwt({
     secret: 'secret',
     userProperty: 'payload',
+    algorithms: ['HS256'],
     getToken: getTokenFromHeaders,
   }),
   optional: jwt({
     secret: 'secret',
-    userPropertyL 'payload',
+    userProperty: 'payload',
+    algorithms: ['HS256'],
     getToken: getTokenFromHeaders,
     credentialsRequired: false,
   })

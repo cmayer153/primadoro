@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import TimingModule from './TimingModule.jsx';
 import LoginField from './LoginField.jsx';
 import LogList from './LogList.jsx';
-import LogForm from './LogForm.jsx';
+//import Signup from './Signup.jsx';
 import axios from 'axios';
 import './fashion.css'
 
@@ -43,6 +43,19 @@ class App extends React.Component {
       .catch( (err) => {
         console.log('error fetching logs: ', err);
       });
+  }
+
+  addUser(newUser) {
+    console.log('CREDS: ', newUser.username);
+    console.log(newUser.password);
+    axios.post(`/api/users`, {user: newUser})
+      .then ( (res) => {
+        console.log('addUser response: ', res);
+      })
+      .catch ( (err) => {
+        console.log('error adding user: ', err);
+      });
+
   }
 
   addLog(timeStamp) {
@@ -85,7 +98,7 @@ class App extends React.Component {
     return (
       <div className="primadoro-main-page">
         PRIMADORO (^)
-        <LoginField saveUser={this.updateUser}/>
+        <LoginField saveUser={this.addUser}/>
         <TimingModule addLog={this.addLog}/>
         <LogList entries={this.state.logEntries} submit={this.editLog}/>
       </div>
