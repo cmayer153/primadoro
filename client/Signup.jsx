@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '@material-ui/core/Modal';
+import LoginField from './LoginField.jsx';
 import './fashion.css';
 
-function Signup({submit}) {
+function Signup({addUser}) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -15,17 +16,7 @@ function Signup({submit}) {
 
   const modalBody = (
     <div className="primadoro-signup-form">
-    <form onSubmit={submit}>
-      <label>
-        Description:
-        <input className="primadoro-signup-user" type="text" name="description" value={myEntry.description} onChange={handleChange}/>
-      </label>
-      <label>
-        Rating:
-        <input type="text" name="workRating" value={myEntry.workRating} onChange={handleChange}/>
-      </label>
-      <input type="submit" value="Save Log" />
-    </form>
+      <LoginField saveUser={addUser}/>
     </div>
   );
 

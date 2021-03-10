@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import TimingModule from './TimingModule.jsx';
 import LoginField from './LoginField.jsx';
 import LogList from './LogList.jsx';
-//import Signup from './Signup.jsx';
+import Signup from './Signup.jsx';
+import {CookiesProvider, Cookies, withCookies} from 'react-cookie';
 import axios from 'axios';
 import './fashion.css'
 
@@ -17,17 +18,29 @@ const getBlankEntry = () => {
 }
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const {cookies} = props;
+    console.log('startup state cookies: ', cookies);
     this.state = {
       currentUser: null,
       logEntries: null,
-      newEntry: null
+      newEntry: null,
+      creds: cookies.get('primadoro') || null
     }
 
+    this.addUser = this.addUser.bind(this);
+    this.loginUser = this.loginUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.addLog = this.addLog.bind(this);
     this.editLog = this.editLog.bind(this);
+  }
+
+  componentDidMount() {
+    if(this.state.creds) {
+      //cookies for this site exist
+      console.log('found this cookie: ', this.state.creds);
+    }
   }
 
   updateUser(newUser) {
@@ -42,6 +55,21 @@ class App extends React.Component {
       })
       .catch( (err) => {
         console.log('error fetching logs: ', err);
+      });
+  }
+
+  loginUser(user) {
+    console.log('CREDS: ', user.username);
+    console.log(user.password);
+    axios.post(`/api/users/login`, {user: user})
+      .then ( (res) => {
+        console.log('loginUser response: ', res.data.user);
+        const {cookies} = this.props;
+        cookies.set('primadoro', res.data.user, {path:'/'});
+        this.setState({creds: res.data.user})
+      })
+      .catch ( (err) => {
+        console.log('error logging in user: ', err);
       });
   }
 
@@ -98,7 +126,8 @@ class App extends React.Component {
     return (
       <div className="primadoro-main-page">
         PRIMADORO (^)
-        <LoginField saveUser={this.addUser}/>
+        <LoginField saveUser={this.loginUser}/>
+        <Signup addUser={this.addUser}/>
         <TimingModule addLog={this.addLog}/>
         <LogList entries={this.state.logEntries} submit={this.editLog}/>
       </div>
@@ -106,4 +135,6 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('primadoro'));
+const AppWithCookies = withCookies(App);
+
+ReactDOM.render(<CookiesProvider><AppWithCookies /></CookiesProvider>, document.getElementById('primadoro'));
