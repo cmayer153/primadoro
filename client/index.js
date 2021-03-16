@@ -40,6 +40,23 @@ class App extends React.Component {
     if(this.state.creds) {
       //cookies for this site exist
       console.log('found this cookie: ', this.state.creds);
+      //TODO this below is copy pasted from loginUser function. should abstract it out into its own function.
+      var authConfig = {
+        headers: {
+          authorization: "Token " + this.state.creds.token
+        }
+      }
+      axios.get(`api/users/logs`, authConfig)
+        .then( (res) => {
+          console.log('CDM BACK with logs: ', res.data);
+          if (res.data[0].logs.length > 0) {
+            this.setState({logEntries: res.data[0].logs});
+          }
+        })
+        .catch( (err) => {
+          console.log('error fetching logs: ', err);
+        })
+
     }
   }
 
@@ -66,7 +83,19 @@ class App extends React.Component {
         console.log('loginUser response: ', res.data.user);
         const {cookies} = this.props;
         cookies.set('primadoro', res.data.user, {path:'/'});
-        this.setState({creds: res.data.user})
+        this.setState({creds: res.data.user});
+        var authConfig = {
+          headers: {
+            authorization: "Token " + res.data.user.token
+          }
+        }
+        axios.get(`api/users/logs`, authConfig)
+          .then( (res) => {
+            console.log('back with logs: ', res.data);
+          })
+          .catch( (err) => {
+            console.log('error fetching logs: ', err);
+          })
       })
       .catch ( (err) => {
         console.log('error logging in user: ', err);
@@ -93,11 +122,16 @@ class App extends React.Component {
     this.setState({newEntry: tempEntry});
     
     console.log('saving log: ', tempEntry)
-    axios.post('/api/saveLog', {entry: tempEntry})
+    var authConfig = {
+      headers: {
+        authorization: "Token " + this.state.creds.token
+      }
+    }
+    axios.post('/api/users/saveLog', {entry: tempEntry}, authConfig)
       .then ( (res) => {
-        console.log('back from server: ', res.data);
-        if (res.data.length > 0) {
-          this.setState({logEntries: res.data});
+        console.log('back from server: ', res.data.logs);
+        if (res.data.logs.length > 0) {
+          this.setState({logEntries: res.data.logs});
         }
       })
       .catch ( (err) => {
@@ -109,7 +143,12 @@ class App extends React.Component {
 
   editLog(inLog) {
     console.log('saving log: ', inLog)
-    axios.post('/api/editLog', {entry: inLog})
+    var authConfig = {
+      headers: {
+        authorization: "Token " + this.state.creds.token
+      }
+    }
+    axios.post('/api/users/editLog', {entry: inLog}, authConfig)
       .then ( (res) => {
         console.log('back from server: ', res.data);
         if (res.data.length > 0) {

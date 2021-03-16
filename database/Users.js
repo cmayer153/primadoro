@@ -8,8 +8,18 @@ const UserSchema = new Schema({
   username: String,
   email: String,
   hash: String,
-  salt: String
+  salt: String,
+  logs: Array
 });
+
+/*
+logs have structure:
+  username: String,
+  timeStamp: String,
+  description: String,
+  workRating: Number
+
+*/
 
 UserSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
@@ -41,6 +51,42 @@ UserSchema.methods.toAuthJSON = function() {
     email: this.email,
     token: this.generateJWT()
   };
+};
+
+UserSchema.methods.addEntry = function(entry) {
+  console.log("USERSCHEMA adding this entry:", entry);
+  this.logs.push(entry);
+  return this.save();
+};
+
+
+UserSchema.methods.getLogs = function() {
+
+};
+
+const findLogWithTime = function(timeStamp) {
+  return this.logs.findIndex((entry) => {
+    if(entry.timeStamp === timeStamp) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+};
+
+UserSchema.methods.editLog = function(entry) {
+  console.log("Editing this etnry:", entry);
+  let logIndex = findLogWithTime.call(this, entry.timeStamp);
+  if (logIndex >= 0) {
+    let tempLog = this.logs[logIndex];
+    tempLog = {...tempLog, description: entry.description, workRating: entry.workRating};
+    this.logs.set(logIndex, tempLog);
+    console.log('about to edit/save: ', tempLog);
+  } else {
+    console.log('Could not find log to update.');
+  }
+  return this.save();
 };
 
 mongoose.model('Users', UserSchema);
