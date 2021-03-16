@@ -108,6 +108,9 @@ class App extends React.Component {
     axios.post(`/api/users`, {user: newUser})
       .then ( (res) => {
         console.log('addUser response: ', res);
+        const {cookies} = this.props;
+        cookies.set('primadoro', res.data.user, {path:'/'});
+        this.setState({creds: res.data.user});
       })
       .catch ( (err) => {
         console.log('error adding user: ', err);
