@@ -3,7 +3,7 @@ const Users = mongoose.model('Users');
 
 
 var sortLogs = (entries) => {
-  return entries.sort( (a, b) => {
+  return entries.logs.sort( (a, b) => {
     if (a.timeStamp > b.timeStamp) {
       return -1;
     } else {

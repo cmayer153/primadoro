@@ -129,7 +129,7 @@ class App extends React.Component {
     }
     axios.post('/api/users/saveLog', {entry: tempEntry}, authConfig)
       .then ( (res) => {
-        console.log('back from server: ', res.data.logs);
+        //console.log('back from server: ', res.data.logs);
         if (res.data.logs.length > 0) {
           this.setState({logEntries: res.data.logs});
         }
@@ -150,9 +150,9 @@ class App extends React.Component {
     }
     axios.post('/api/users/editLog', {entry: inLog}, authConfig)
       .then ( (res) => {
-        console.log('back from server: ', res.data);
-        if (res.data.length > 0) {
-          this.setState({logEntries: res.data});
+        //console.log('back from server: ', res.data);
+        if (res.data.logs.length > 0) {
+          this.setState({logEntries: res.data.logs});
         }
       })
       .catch ( (err) => {

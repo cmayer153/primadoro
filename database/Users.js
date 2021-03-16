@@ -55,7 +55,7 @@ UserSchema.methods.toAuthJSON = function() {
 
 UserSchema.methods.addEntry = function(entry) {
   console.log("USERSCHEMA adding this entry:", entry);
-  this.logs.push(entry);
+  this.logs.unshift(entry);
   return this.save();
 };
 
