@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const db = require('./connection.js');
 
 const logSchema = new mongoose.Schema({
   username: String,

@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import TimingModule from './TimingModule.jsx';
 import LoginField from './LoginField.jsx';
 import LogList from './LogList.jsx';
-import LogForm from './LogForm.jsx';
+import Signup from './Signup.jsx';
+import {CookiesProvider, Cookies, withCookies} from 'react-cookie';
 import axios from 'axios';
 import './fashion.css'
 
@@ -17,17 +18,46 @@ const getBlankEntry = () => {
 }
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const {cookies} = props;
+    console.log('startup state cookies: ', cookies);
     this.state = {
       currentUser: null,
       logEntries: null,
-      newEntry: null
+      newEntry: null,
+      creds: cookies.get('primadoro') || null
     }
 
+    this.addUser = this.addUser.bind(this);
+    this.loginUser = this.loginUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.addLog = this.addLog.bind(this);
     this.editLog = this.editLog.bind(this);
+  }
+
+  componentDidMount() {
+    if(this.state.creds) {
+      //cookies for this site exist
+      console.log('found this cookie: ', this.state.creds);
+      //TODO this below is copy pasted from loginUser function. should abstract it out into its own function.
+      var authConfig = {
+        headers: {
+          authorization: "Token " + this.state.creds.token
+        }
+      }
+      axios.get(`api/users/logs`, authConfig)
+        .then( (res) => {
+          console.log('CDM BACK with logs: ', res.data);
+          if (res.data[0].logs.length > 0) {
+            this.setState({logEntries: res.data[0].logs});
+          }
+        })
+        .catch( (err) => {
+          console.log('error fetching logs: ', err);
+        })
+
+    }
   }
 
   updateUser(newUser) {
@@ -45,6 +75,49 @@ class App extends React.Component {
       });
   }
 
+  loginUser(user) {
+    console.log('CREDS: ', user.username);
+    console.log(user.password);
+    axios.post(`/api/users/login`, {user: user})
+      .then ( (res) => {
+        console.log('loginUser response: ', res.data.user);
+        const {cookies} = this.props;
+        cookies.set('primadoro', res.data.user, {path:'/'});
+        this.setState({creds: res.data.user});
+        var authConfig = {
+          headers: {
+            authorization: "Token " + res.data.user.token
+          }
+        }
+        axios.get(`api/users/logs`, authConfig)
+          .then( (res) => {
+            console.log('back with logs: ', res.data);
+          })
+          .catch( (err) => {
+            console.log('error fetching logs: ', err);
+          })
+      })
+      .catch ( (err) => {
+        console.log('error logging in user: ', err);
+      });
+  }
+
+  addUser(newUser) {
+    console.log('CREDS: ', newUser.username);
+    console.log(newUser.password);
+    axios.post(`/api/users`, {user: newUser})
+      .then ( (res) => {
+        console.log('addUser response: ', res);
+        const {cookies} = this.props;
+        cookies.set('primadoro', res.data.user, {path:'/'});
+        this.setState({creds: res.data.user});
+      })
+      .catch ( (err) => {
+        console.log('error adding user: ', err);
+      });
+
+  }
+
   addLog(timeStamp) {
     let tempEntry = getBlankEntry();
     tempEntry.username = this.state.currentUser;
@@ -52,11 +125,16 @@ class App extends React.Component {
     this.setState({newEntry: tempEntry});
     
     console.log('saving log: ', tempEntry)
-    axios.post('/api/saveLog', {entry: tempEntry})
+    var authConfig = {
+      headers: {
+        authorization: "Token " + this.state.creds.token
+      }
+    }
+    axios.post('/api/users/saveLog', {entry: tempEntry}, authConfig)
       .then ( (res) => {
-        console.log('back from server: ', res.data);
-        if (res.data.length > 0) {
-          this.setState({logEntries: res.data});
+        //console.log('back from server: ', res.data.logs);
+        if (res.data.logs.length > 0) {
+          this.setState({logEntries: res.data.logs});
         }
       })
       .catch ( (err) => {
@@ -68,11 +146,16 @@ class App extends React.Component {
 
   editLog(inLog) {
     console.log('saving log: ', inLog)
-    axios.post('/api/editLog', {entry: inLog})
+    var authConfig = {
+      headers: {
+        authorization: "Token " + this.state.creds.token
+      }
+    }
+    axios.post('/api/users/editLog', {entry: inLog}, authConfig)
       .then ( (res) => {
-        console.log('back from server: ', res.data);
-        if (res.data.length > 0) {
-          this.setState({logEntries: res.data});
+        //console.log('back from server: ', res.data);
+        if (res.data.logs.length > 0) {
+          this.setState({logEntries: res.data.logs});
         }
       })
       .catch ( (err) => {
@@ -85,7 +168,8 @@ class App extends React.Component {
     return (
       <div className="primadoro-main-page">
         PRIMADORO (^)
-        <LoginField saveUser={this.updateUser}/>
+        <LoginField saveUser={this.loginUser}/>
+        <Signup addUser={this.addUser}/>
         <TimingModule addLog={this.addLog}/>
         <LogList entries={this.state.logEntries} submit={this.editLog}/>
       </div>
@@ -93,4 +177,6 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('primadoro'));
+const AppWithCookies = withCookies(App);
+
+ReactDOM.render(<CookiesProvider><AppWithCookies /></CookiesProvider>, document.getElementById('primadoro'));

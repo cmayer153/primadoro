@@ -1,7 +1,9 @@
-const PrimaLogs = require('./PrimaLogs.js');
+const mongoose = require('mongoose');
+const Users = mongoose.model('Users');
+
 
 var sortLogs = (entries) => {
-  return entries.sort( (a, b) => {
+  return entries.logs.sort( (a, b) => {
     if (a.timeStamp > b.timeStamp) {
       return -1;
     } else {
@@ -11,7 +13,7 @@ var sortLogs = (entries) => {
 }
 
 var getLogs = (username) => {
-  const query = PrimaLogs.where({username: username});
+  const query = Users.where({username: username});
   return query.find();
 };
 
