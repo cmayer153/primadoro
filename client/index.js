@@ -33,7 +33,10 @@ class App extends React.Component {
     this.loginUser = this.loginUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.addLog = this.addLog.bind(this);
+    this.addUserLog = this.addUserLog.bind(this);
     this.editLog = this.editLog.bind(this);
+    //this.editUserLog = this.editUserLog.bind(this);
+
   }
 
   componentDidMount() {
@@ -119,6 +122,31 @@ class App extends React.Component {
   }
 
   addLog(timeStamp) {
+    if (this.state.currentUser != null) {
+      this.addUserLog(timeStamp)
+    } else {
+      this.addLocalStorageLog(timeStamp);
+    }
+  }
+
+  addLocalStorageLog(timeStamp) {
+    let tempEntry = getBlankEntry();
+    tempEntry.timeStamp = timeStamp;
+    //this.setState({newEntry: tempEntry});
+    var localLogs = JSON.parse(localStorage.getItem('primadoro_logs'));
+    //TEST CODE
+    console.log('got this from localStorage: ', localLogs);
+    //END TEST CODE
+    if (! Array.isArray(localLogs)) {
+      localLogs = [];
+    }
+    localLogs.push(tempEntry);
+    console.log('saving this to localStorage: ', localLogs);
+    localStorage.setItem('primadoro_logs', JSON.stringify(localLogs));
+    this.setState({logEntries: localLogs});
+  }
+
+  addUserLog(timeStamp) {
     let tempEntry = getBlankEntry();
     tempEntry.username = this.state.currentUser;
     tempEntry.timeStamp = timeStamp;
