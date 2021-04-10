@@ -63,6 +63,11 @@ class App extends React.Component {
           console.log('error fetching logs: ', err);
         })
 
+    } else {
+      var localLogs = JSON.parse(localStorage.getItem('primadoro_logs'));
+      if (Array.isArray(localLogs)) {
+        this.setState({logEntries: localLogs});
+      }
     }
   }
 
@@ -143,7 +148,7 @@ class App extends React.Component {
     if (! Array.isArray(localLogs)) {
       localLogs = [];
     }
-    localLogs.push(tempEntry);
+    localLogs.unshift(tempEntry);
     console.log('saving this to localStorage: ', localLogs);
     localStorage.setItem('primadoro_logs', JSON.stringify(localLogs));
     this.setState({logEntries: localLogs});
