@@ -33,7 +33,13 @@ class App extends React.Component {
     this.loginUser = this.loginUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.addLog = this.addLog.bind(this);
+    this.addUserLog = this.addUserLog.bind(this);
+    this.addLocalStorageLog = this.addLocalStorageLog.bind(this);
     this.editLog = this.editLog.bind(this);
+    this.editUserLog = this.editUserLog.bind(this);
+    this.editLocalStorageLog = this.editLocalStorageLog.bind(this);
+
+
   }
 
   componentDidMount() {
@@ -57,6 +63,11 @@ class App extends React.Component {
           console.log('error fetching logs: ', err);
         })
 
+    } else {
+      var localLogs = JSON.parse(localStorage.getItem('primadoro_logs'));
+      if (Array.isArray(localLogs)) {
+        this.setState({logEntries: localLogs});
+      }
     }
   }
 
@@ -119,6 +130,31 @@ class App extends React.Component {
   }
 
   addLog(timeStamp) {
+    if (this.state.currentUser != null) {
+      this.addUserLog(timeStamp)
+    } else {
+      this.addLocalStorageLog(timeStamp);
+    }
+  }
+
+  addLocalStorageLog(timeStamp) {
+    let tempEntry = getBlankEntry();
+    tempEntry.timeStamp = timeStamp;
+    //this.setState({newEntry: tempEntry});
+    var localLogs = JSON.parse(localStorage.getItem('primadoro_logs'));
+    //TEST CODE
+    console.log('got this from localStorage: ', localLogs);
+    //END TEST CODE
+    if (! Array.isArray(localLogs)) {
+      localLogs = [];
+    }
+    localLogs.unshift(tempEntry);
+    console.log('saving this to localStorage: ', localLogs);
+    localStorage.setItem('primadoro_logs', JSON.stringify(localLogs));
+    this.setState({logEntries: localLogs});
+  }
+
+  addUserLog(timeStamp) {
     let tempEntry = getBlankEntry();
     tempEntry.username = this.state.currentUser;
     tempEntry.timeStamp = timeStamp;
@@ -145,7 +181,15 @@ class App extends React.Component {
   }
 
   editLog(inLog) {
-    console.log('saving log: ', inLog)
+    if (this.state.currentUser != null) {
+      this.editUserLog(inLog);
+    } else {
+      this.editLocalStorageLog(inLog);
+    }
+  }
+
+  editUserLog(inLog) {
+    console.log('saving log: ', inLog);
     var authConfig = {
       headers: {
         authorization: "Token " + this.state.creds.token
@@ -161,6 +205,21 @@ class App extends React.Component {
       .catch ( (err) => {
         console.log('error trying to save log: ', err);
       })
+  }
+
+  editLocalStorageLog(inLog) {
+    var localLogs = JSON.parse(localStorage.getItem('primadoro_logs'));
+    for (let i = 0; i < localLogs.length; i++) {
+      if (localLogs[i].timeStamp === inLog.timeStamp) {
+        localLogs[i].description = inLog.description;
+        localLogs[i].workRating = inLog.workRating;
+        break;
+      }
+    }
+
+    console.log('saving this to localStorage: ', localLogs);
+    localStorage.setItem('primadoro_logs', JSON.stringify(localLogs));
+    this.setState({logEntries: localLogs});
   }
 
 
