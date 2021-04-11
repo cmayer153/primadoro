@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {Helmet} from 'react-helmet';
 
 function Timer({running, setRunning, getInitTime, zeroCB, preloadCB}) {
   const [currentTime, setCurrentTime] = useState(getInitTime());
@@ -34,7 +35,12 @@ function Timer({running, setRunning, getInitTime, zeroCB, preloadCB}) {
   
 
   return (
+    <React.Fragment>
+    <Helmet>
+    <title>{formatTime(currentTime)}</title>
+    </Helmet>
     <h1>{formatTime(currentTime)}</h1>
+    </React.Fragment>
   )
   
 
