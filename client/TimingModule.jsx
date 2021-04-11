@@ -18,14 +18,12 @@ function TimingModule({addLog}) {
   }
 
   useEffect ( () => {
-    console.log('new pomMarker:', pomMarker);
-    console.log('updating current interval to: ', intervals[pomMarker]);
+    //console.log('updating current interval to: ', intervals[pomMarker]);
     setCurrentInterval(intervals[pomMarker % intervals.length]);
     
   }, [pomMarker])
 
   const getInitTime = () => {
-    console.log('getInitTime: ', currentInterval);
     return currentInterval;
   }
 

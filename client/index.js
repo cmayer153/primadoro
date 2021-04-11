@@ -21,7 +21,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const {cookies} = props;
-    console.log('startup state cookies: ', cookies);
+    //console.log('startup state cookies: ', cookies);
     this.state = {
       currentUser: null,
       logEntries: null,
@@ -31,13 +31,14 @@ class App extends React.Component {
 
     this.addUser = this.addUser.bind(this);
     this.loginUser = this.loginUser.bind(this);
-    this.updateUser = this.updateUser.bind(this);
+    //this.updateUser = this.updateUser.bind(this);
     this.addLog = this.addLog.bind(this);
     this.addUserLog = this.addUserLog.bind(this);
     this.addLocalStorageLog = this.addLocalStorageLog.bind(this);
     this.editLog = this.editLog.bind(this);
     this.editUserLog = this.editUserLog.bind(this);
     this.editLocalStorageLog = this.editLocalStorageLog.bind(this);
+    this.loginOrShowUser = this.loginOrShowUser.bind(this);
 
 
   }
@@ -45,7 +46,6 @@ class App extends React.Component {
   componentDidMount() {
     if(this.state.creds) {
       //cookies for this site exist
-      console.log('found this cookie: ', this.state.creds);
       //TODO this below is copy pasted from loginUser function. should abstract it out into its own function.
       var authConfig = {
         headers: {
@@ -54,9 +54,9 @@ class App extends React.Component {
       }
       axios.get(`api/users/logs`, authConfig)
         .then( (res) => {
-          console.log('CDM BACK with logs: ', res.data);
           if (res.data[0].logs.length > 0) {
             this.setState({logEntries: res.data[0].logs});
+
           }
         })
         .catch( (err) => {
@@ -71,30 +71,14 @@ class App extends React.Component {
     }
   }
 
-  updateUser(newUser) {
-    console.log('Switched to user: ', newUser);
-    this.setState({currentUser: newUser});
-    this.setState({logEntries: null});
-    axios.get(`/api/logs/${newUser}`)
-      .then ( (res) => {
-        if (res.data.length > 0) {
-          this.setState({logEntries: res.data});
-        }
-      })
-      .catch( (err) => {
-        console.log('error fetching logs: ', err);
-      });
-  }
-
   loginUser(user) {
-    console.log('CREDS: ', user.username);
-    console.log(user.password);
     axios.post(`/api/users/login`, {user: user})
       .then ( (res) => {
-        console.log('loginUser response: ', res.data.user);
+        //console.log('loginUser response: ', res.data.user);
         const {cookies} = this.props;
         cookies.set('primadoro', res.data.user, {path:'/'});
         this.setState({creds: res.data.user});
+        this.setState({currentUser: res.data.user.username});
         var authConfig = {
           headers: {
             authorization: "Token " + res.data.user.token
@@ -102,7 +86,8 @@ class App extends React.Component {
         }
         axios.get(`api/users/logs`, authConfig)
           .then( (res) => {
-            console.log('back with logs: ', res.data);
+            //console.log('back with logs: ', res.data);
+            this.setState({logEntries: res.data[0].logs});
           })
           .catch( (err) => {
             console.log('error fetching logs: ', err);
@@ -113,15 +98,19 @@ class App extends React.Component {
       });
   }
 
+
   addUser(newUser) {
     console.log('CREDS: ', newUser.username);
     console.log(newUser.password);
+    // TODO could add an endpoint for this action
     axios.post(`/api/users`, {user: newUser})
       .then ( (res) => {
         console.log('addUser response: ', res);
         const {cookies} = this.props;
         cookies.set('primadoro', res.data.user, {path:'/'});
         this.setState({creds: res.data.user});
+        this.setState({currentUser: res.data.user.username});
+
       })
       .catch ( (err) => {
         console.log('error adding user: ', err);
@@ -130,7 +119,7 @@ class App extends React.Component {
   }
 
   addLog(timeStamp) {
-    if (this.state.currentUser != null) {
+    if (this.state.creds != null) {
       this.addUserLog(timeStamp)
     } else {
       this.addLocalStorageLog(timeStamp);
@@ -143,13 +132,13 @@ class App extends React.Component {
     //this.setState({newEntry: tempEntry});
     var localLogs = JSON.parse(localStorage.getItem('primadoro_logs'));
     //TEST CODE
-    console.log('got this from localStorage: ', localLogs);
+    //console.log('got this from localStorage: ', localLogs);
     //END TEST CODE
     if (! Array.isArray(localLogs)) {
       localLogs = [];
     }
     localLogs.unshift(tempEntry);
-    console.log('saving this to localStorage: ', localLogs);
+    //console.log('saving this to localStorage: ', localLogs);
     localStorage.setItem('primadoro_logs', JSON.stringify(localLogs));
     this.setState({logEntries: localLogs});
   }
@@ -181,7 +170,7 @@ class App extends React.Component {
   }
 
   editLog(inLog) {
-    if (this.state.currentUser != null) {
+    if (this.state.creds != null) {
       this.editUserLog(inLog);
     } else {
       this.editLocalStorageLog(inLog);
@@ -222,12 +211,25 @@ class App extends React.Component {
     this.setState({logEntries: localLogs});
   }
 
+  loginOrShowUser() {
+    if (this.state.creds === null) {
+      return (        
+        <LoginField saveUser={this.loginUser}/>
+      )
+    } else {
+      return ( 
+        <a>Logged in as: {this.state.creds.username}</a>
+      )
+    }
+
+  }
+
 
   render() {
     return (
       <div className="primadoro-main-page">
         PRIMADORO (^)
-        <LoginField saveUser={this.loginUser}/>
+        {this.loginOrShowUser()}
         <Signup addUser={this.addUser}/>
         <TimingModule addLog={this.addLog}/>
         <LogList entries={this.state.logEntries} submit={this.editLog}/>

@@ -28,7 +28,7 @@ function LoginField({saveUser}) {
       </label>
       <label>
         Password:
-        <input type="text" name="password" value={creds.password} onChange={handleChange}/>
+        <input type="password" name="password" value={creds.password} onChange={handleChange}/>
       </label>
       <input type="submit" value="Login" />
     </form>
