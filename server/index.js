@@ -1,9 +1,15 @@
 const express = require('express');
+const https = require('https');
 const session = require('express-session');
 const app = express();
 const bodyParser = require('body-parser');
-const PORT = 3010
+if (process.env.NODE_ENV === 'production') {
+  const PORT = 443;
+} else {
+  const PORT = 3010
+}
 const path = require('path');
+const fs = require('fs');
 //counting on this queries import to start the chain which
 //makes the initial connection to Mongo. Is this a flawed method?
 //import { getLogs, saveLog, editLog, sortLogs } from '../database/queries.js';
@@ -62,5 +68,13 @@ app.post('/api/editLog', (req, res) => {
     })
 });
 */
-
-app.listen(PORT, () => {console.log('Primadoro listening on port: ', PORT)});
+if (process.env.NODE_ENV === 'production') {
+  const httpsServer = https.createServer({
+    key: fs.readFileSync('/etc/letsencrypt/live/primadoro.app/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/primadoro.app/fullchain.pem'),
+  }, app);
+  
+  httpsServer.listen(PORT, () => {console.log('Primadoro listening on port: ', PORT)});
+} else {
+  app.listen(PORT, () => {console.log('Primadoro listening on port: ', PORT)});
+}
