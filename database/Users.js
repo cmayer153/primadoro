@@ -59,7 +59,6 @@ UserSchema.methods.addEntry = function(entry) {
   return this.save();
 };
 
-
 UserSchema.methods.getLogs = function() {
 
 };

@@ -3,11 +3,7 @@ const https = require('https');
 const session = require('express-session');
 const app = express();
 const bodyParser = require('body-parser');
-if (process.env.NODE_ENV === 'production') {
-  const PORT = 443;
-} else {
-  const PORT = 3010
-}
+const PORT = process.env.NODE_ENV === 'production' ? 443 : 3010;
 const path = require('path');
 const fs = require('fs');
 //counting on this queries import to start the chain which

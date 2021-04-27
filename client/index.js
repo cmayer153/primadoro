@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
+import TitleMenu from './TitleMenu.jsx';
 import TimingModule from './TimingModule.jsx';
 import LoginField from './LoginField.jsx';
 import LogList from './LogList.jsx';
@@ -228,9 +229,8 @@ class App extends React.Component {
   render() {
     return (
       <div className="primadoro-main-page">
-        PRIMADORO (^)
+        <TitleMenu creds={this.state.creds} saveUser={this.loginUser} addUser={this.addUser}/>
         {this.loginOrShowUser()}
-        <Signup addUser={this.addUser}/>
         <TimingModule addLog={this.addLog}/>
         <LogList entries={this.state.logEntries} submit={this.editLog}/>
       </div>
