@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-  export default function TitleMenu({creds, saveUser, addUser}) {
+  export default function TitleMenu({creds, saveUser, addUser, logoutUser}) {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
       return (
         <React.Fragment>
         <a> Logged in as: {creds.username}</a>
-        <Button color="inherit">Logout</Button>
+        <Button color="inherit" onClick={logoutUser}>Logout</Button>
 
         </React.Fragment>
       )

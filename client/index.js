@@ -32,14 +32,14 @@ class App extends React.Component {
 
     this.addUser = this.addUser.bind(this);
     this.loginUser = this.loginUser.bind(this);
-    //this.updateUser = this.updateUser.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
     this.addLog = this.addLog.bind(this);
     this.addUserLog = this.addUserLog.bind(this);
     this.addLocalStorageLog = this.addLocalStorageLog.bind(this);
     this.editLog = this.editLog.bind(this);
     this.editUserLog = this.editUserLog.bind(this);
     this.editLocalStorageLog = this.editLocalStorageLog.bind(this);
-    this.loginOrShowUser = this.loginOrShowUser.bind(this);
+    //this.loginOrShowUser = this.loginOrShowUser.bind(this);
 
 
   }
@@ -99,6 +99,14 @@ class App extends React.Component {
       });
   }
 
+  logoutUser() {
+    const {cookies} = this.props;
+    cookies.remove('primadoro', {path:'/'});
+    this.setState({creds: null});
+    this.setState({currentUser: null});
+    this.setState({logEntries: null});
+  }
+
 
   addUser(newUser) {
     console.log('CREDS: ', newUser.username);
@@ -148,7 +156,7 @@ class App extends React.Component {
     let tempEntry = getBlankEntry();
     tempEntry.username = this.state.currentUser;
     tempEntry.timeStamp = timeStamp;
-    this.setState({newEntry: tempEntry});
+    //this.setState({newEntry: tempEntry});
     
     console.log('saving log: ', tempEntry)
     var authConfig = {
@@ -212,6 +220,7 @@ class App extends React.Component {
     this.setState({logEntries: localLogs});
   }
 
+  /*
   loginOrShowUser() {
     if (this.state.creds === null) {
       return (        
@@ -224,12 +233,13 @@ class App extends React.Component {
     }
 
   }
+  */
 
 
   render() {
     return (
       <div className="primadoro-main-page">
-        <TitleMenu creds={this.state.creds} saveUser={this.loginUser} addUser={this.addUser}/>
+        <TitleMenu creds={this.state.creds} saveUser={this.loginUser} addUser={this.addUser} logoutUser={this.logoutUser}/>
         <TimingModule addLog={this.addLog}/>
         <LogList entries={this.state.logEntries} submit={this.editLog}/>
       </div>
