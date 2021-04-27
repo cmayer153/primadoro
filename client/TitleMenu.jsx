@@ -21,12 +21,28 @@ const useStyles = makeStyles((theme) => ({
   export default function TitleMenu({creds, saveUser, addUser}) {
   const classes = useStyles();
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const modalBody = (
+    <div className="primadoro-signup-form">
+      <LoginField saveUser={addUser}/>
+    </div>
+  );
+
   const loginOrShowUser = () => {
     if (creds === null) {
       return (
         <React.Fragment>
-        <Button color="inherit">Login</Button>
-        <Signup addUser={addUser}/>
+        <Button color="inherit" onClick={handleOpen}>Login</Button>
+        <Button color="inherit" onClick={handleOpen}>Signup</Button>
         </React.Fragment>
       )
     } else {
@@ -50,6 +66,11 @@ const useStyles = makeStyles((theme) => ({
             {loginOrShowUser()}
           </Toolbar>
         </AppBar>
+        <Modal
+          open={open}
+          onClose={handleClose}>
+          {modalBody}
+        </Modal>
       </div>
     );
   }

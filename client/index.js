@@ -230,7 +230,6 @@ class App extends React.Component {
     return (
       <div className="primadoro-main-page">
         <TitleMenu creds={this.state.creds} saveUser={this.loginUser} addUser={this.addUser}/>
-        {this.loginOrShowUser()}
         <TimingModule addLog={this.addLog}/>
         <LogList entries={this.state.logEntries} submit={this.editLog}/>
       </div>
