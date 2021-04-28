@@ -72,10 +72,15 @@ class App extends React.Component {
     }
   }
 
+
+  //TODO: this seems to be malfunctioning, it is not running my test prints
+  // below the axios post call. I'm not sure why.
+  // maybe a better approach for loading logs on login
+  // would be a useEffect hook for the creds object.
+  // I would also like to debug this issue more though.
   loginUser(user) {
     axios.post(`/api/users/login`, {user: user})
       .then ( (res) => {
-        //console.log('loginUser response: ', res.data.user);
         const {cookies} = this.props;
         cookies.set('primadoro', res.data.user, {path:'/'});
         this.setState({creds: res.data.user});
@@ -87,7 +92,7 @@ class App extends React.Component {
         }
         axios.get(`api/users/logs`, authConfig)
           .then( (res) => {
-            //console.log('back with logs: ', res.data);
+            //console.log('back with logs: ', res.data[0].logs);
             this.setState({logEntries: res.data[0].logs});
           })
           .catch( (err) => {
@@ -109,12 +114,12 @@ class App extends React.Component {
 
 
   addUser(newUser) {
-    console.log('CREDS: ', newUser.username);
-    console.log(newUser.password);
+    //console.log('CREDS: ', newUser.username);
+    //console.log(newUser.password);
     // TODO could add an endpoint for this action
     axios.post(`/api/users`, {user: newUser})
       .then ( (res) => {
-        console.log('addUser response: ', res);
+        //console.log('addUser response: ', res);
         const {cookies} = this.props;
         cookies.set('primadoro', res.data.user, {path:'/'});
         this.setState({creds: res.data.user});
@@ -158,7 +163,7 @@ class App extends React.Component {
     tempEntry.timeStamp = timeStamp;
     //this.setState({newEntry: tempEntry});
     
-    console.log('saving log: ', tempEntry)
+    //console.log('saving log: ', tempEntry)
     var authConfig = {
       headers: {
         authorization: "Token " + this.state.creds.token
@@ -187,7 +192,7 @@ class App extends React.Component {
   }
 
   editUserLog(inLog) {
-    console.log('saving log: ', inLog);
+    //console.log('saving log: ', inLog);
     var authConfig = {
       headers: {
         authorization: "Token " + this.state.creds.token
@@ -215,7 +220,7 @@ class App extends React.Component {
       }
     }
 
-    console.log('saving this to localStorage: ', localLogs);
+    //console.log('saving this to localStorage: ', localLogs);
     localStorage.setItem('primadoro_logs', JSON.stringify(localLogs));
     this.setState({logEntries: localLogs});
   }
