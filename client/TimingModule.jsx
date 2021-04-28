@@ -6,7 +6,10 @@ import alarm from './sounds/alarm_gentle_CUT.wav';
 
 function TimingModule({addLog}) {
   const [pomMarker, setPomMarker] = useState(0);
-  const intervals = [25, 5, 25, 5, 25, 5, 25, 20];
+  // quick intervals for testing
+  //const intervals = [25, 5, 25, 5, 25, 5, 25, 20];
+  //prod intervals
+  const intervals = [1500, 300, 1500, 300, 1500, 300, 1500, 1200];
   const [currentInterval, setCurrentInterval] = useState(intervals[pomMarker]);
   const [running, setRunning] = useState(false);
   const alarmAudio = new Audio(alarm);
