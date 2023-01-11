@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
   const modalBodyLogin = (
     <div className="primadoro-signup-form">
-      <LoginField saveUser={saveUser}/>
+      <LoginField saveUser={saveUser} closeModal={handleCloseLogin}/>
     </div>
   );
 
