@@ -5,7 +5,7 @@ import './fashion.css';
   Dual-purpose login and signup
 */
 
-function LoginField({saveUser}) {
+function LoginField({saveUser, closeModal}) {
   // IN THE MORNING - 
   // Fix this to hold username and password, 
   // update the handleChange method below, and add the submit new user method to the main app.
@@ -18,6 +18,7 @@ function LoginField({saveUser}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     saveUser(creds);
+    closeModal();
   }
 
   return (
